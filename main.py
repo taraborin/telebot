@@ -2,10 +2,6 @@ from config import token
 from model import StyleTransferModel
 from io import BytesIO
 
-TELEGRAM_TOKEN = token
-PORT = 8443
-HEROKU_APP_NAME = "taraborinstyleflow"
-
 model = StyleTransferModel()
 first_image_file = {}
 
@@ -54,34 +50,10 @@ def send_photo(update, context, content_image_file, style_image_file):
 if __name__ == '__main__':
     from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
 
-    """updater = Updater(token=token)
+    updater = Updater(token=token)
     dispatcher = updater.dispatcher
     start_handler = CommandHandler('start', start)
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(MessageHandler(Filters.photo, get_photo))
     updater.start_polling()
-    updater.idle()"""
-    
-    
-    updater = Updater(token=token)
-    # add handlers
-    dispatcher = updater.dispatcher
-    start_handler = CommandHandler('start', start)
-    dispatcher.add_handler(start_handler)
-    dispatcher.add_handler(MessageHandler(Filters.photo, get_photo))
-    # Start the Bot
-    if not HEROKU_APP_NAME:  # pooling mode
-        print("Can't detect 'HEROKU_APP_NAME' env. Running bot in pooling mode.")
-        print("Note: this is not a great way to deploy the bot in Heroku.")
-        updater.start_polling()
-        updater.idle()
-
-    else:  # webhook mode
-        print(f"Running bot in webhook mode. Make sure that this url is correct: https://{HEROKU_APP_NAME}.herokuapp.com/")
-        updater.start_webhook(
-            listen="0.0.0.0",
-            port=PORT,
-            url_path=TELEGRAM_TOKEN,
-            webhook_url=f"https://{HEROKU_APP_NAME}.herokuapp.com/{TELEGRAM_TOKEN}"
-        )
-        updater.idle()
+    updater.idle()

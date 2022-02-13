@@ -1,6 +1,7 @@
 from config import token
 from model import StyleTransferModel
 from io import BytesIO
+import os
 
 model = StyleTransferModel()
 first_image_file = {}

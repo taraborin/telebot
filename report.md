@@ -1,3 +1,4 @@
++7(903)5059346
 Имя бота: style_flow
 
 1. Взят пример с pytorch по style transfer (https://pytorch.org/tutorials/advanced/neural_style_tutorial.html)

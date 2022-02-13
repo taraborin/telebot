@@ -50,10 +50,20 @@ def send_photo(update, context, content_image_file, style_image_file):
 if __name__ == '__main__':
     from telegram.ext import Updater, MessageHandler, Filters, CommandHandler
 
-    updater = Updater(token=token)
+    """updater = Updater(token=token)
     dispatcher = updater.dispatcher
     start_handler = CommandHandler('start', start)
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(MessageHandler(Filters.photo, get_photo))
     updater.start_polling()
+    updater.idle()"""
+    
+    PORT = int(os.environ.get('PORT', '8443'))
+    updater = Updater(token=token)
+    # add handlers
+    dispatcher = updater.dispatcher
+    start_handler = CommandHandler('start', start)
+    dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(MessageHandler(Filters.photo, get_photo))
+    updater.start_webhook(listen="127.0.0.1",port=PORT,url_path=token,webhook_url="https://<appname>.herokuapp.com/" + token)
     updater.idle()

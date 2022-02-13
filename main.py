@@ -69,6 +69,6 @@ if __name__ == '__main__':
     # Start the Bot
     updater.start_webhook(listen="0.0.0.0",
                           port=int(PORT),
-                          url_path=TOKEN)
+                          url_path=token)
     updater.bot.setWebhook("https://taraborinstyleflow.herokuapp.com/" + token)    
     updater.idle()

@@ -3,6 +3,13 @@ from model import StyleTransferModel
 from io import BytesIO
 import os
 
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+if TELEGRAM_TOKEN is None:
+    raise Exception("Please setup the .env variable TELEGRAM_TOKEN.")
+
+PORT = int(os.environ.get('PORT', '8443'))
+HEROKU_APP_NAME = os.getenv("HEROKU_APP_NAME")
+
 model = StyleTransferModel()
 first_image_file = {}
 
@@ -59,7 +66,7 @@ if __name__ == '__main__':
     updater.start_polling()
     updater.idle()"""
     
-    PORT = int(os.environ.get('PORT', '8443'))
+    
     updater = Updater(token=token)
     # add handlers
     dispatcher = updater.dispatcher
@@ -67,8 +74,18 @@ if __name__ == '__main__':
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(MessageHandler(Filters.photo, get_photo))
     # Start the Bot
-    updater.start_webhook(listen="0.0.0.0",
-                          port=int(PORT),
-                          url_path=token)
-    updater.bot.setWebhook("https://taraborinstyleflow.herokuapp.com/" + token)    
-    updater.idle()
+    if not HEROKU_APP_NAME:  # pooling mode
+        print("Can't detect 'HEROKU_APP_NAME' env. Running bot in pooling mode.")
+        print("Note: this is not a great way to deploy the bot in Heroku.")
+        updater.start_polling()
+        updater.idle()
+
+    else:  # webhook mode
+        print(f"Running bot in webhook mode. Make sure that this url is correct: https://{HEROKU_APP_NAME}.herokuapp.com/")
+        updater.start_webhook(
+            listen="0.0.0.0",
+            port=PORT,
+            url_path=TELEGRAM_TOKEN,
+            webhook_url=f"https://{HEROKU_APP_NAME}.herokuapp.com/{TELEGRAM_TOKEN}"
+        )
+        updater.idle()

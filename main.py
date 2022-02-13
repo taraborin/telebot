@@ -65,5 +65,5 @@ if __name__ == '__main__':
     start_handler = CommandHandler('start', start)
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(MessageHandler(Filters.photo, get_photo))
-    updater.start_webhook(listen="127.0.0.1",port=PORT,url_path=token,webhook_url="https://<appname>.herokuapp.com/" + token)
+    updater.start_webhook(listen="0.0.0.0",port=PORT,url_path=token,webhook_url="https://taraborinstyleflow.herokuapp.com/" + token)
     updater.idle()
